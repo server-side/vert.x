@@ -394,7 +394,10 @@ public class LocalEchoClient extends EventBusAppBase {
             TestUtils.byteArraysEqual((byte[])msg, (byte[])reply.body());
           }
 	        // Bytes and Booleans are never copied since cached in the JVM
-	        // NOTE-YOUKU: All data should not be copied.
+	        // NOTE-YOUKU: All local data should not be copied.
+	        // TODO: Why non-local Byte an Boolean are also not copied?
+	        if (isLocal() || msg instanceof  Byte || msg instanceof Boolean) tu.azzert(msg == reply.body());
+	        else tu.azzert(msg != reply.body());
 	        /**
           if ((!isLocal() && !(msg instanceof Byte) && !(msg instanceof Boolean)) ||
               (isLocal() && ((msg instanceof Buffer) || (msg instanceof byte[]) || (msg instanceof JsonObject) || (msg instanceof JsonArray)))) {

@@ -26,50 +26,50 @@ import vertx.tests.core.json.TestClient;
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-public class JavaJsonEventBusTest extends TestBase {
-
-  private static final Logger log = LoggerFactory.getLogger(JavaJsonEventBusTest.class);
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    startApp(TestClient.class.getName());
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
-  @Test
-  public void testChangesNotVisibleObject1() throws Exception {
-    startTest(getMethodName());
-  }
-
-  @Test
-  public void testChangesNotVisibleObject2() throws Exception {
-    startTest(getMethodName());
-  }
-
-  @Test
-  public void testChangesNotVisibleObject3() throws Exception {
-    startTest(getMethodName());
-  }
-
-  @Test
-  public void testChangesNotVisibleArray1() throws Exception {
-    startTest(getMethodName());
-  }
-
-  @Test
-  public void testChangesNotVisibleArray2() throws Exception {
-    startTest(getMethodName());
-  }
-
-  @Test
-  public void testChangesNotVisibleArray3() throws Exception {
-    startTest(getMethodName());
-  }
+public class JavaJsonEventBusTest {// extends TestBase {
+// NOTE-YOUKU: Changes are visible because local messages are not copied now.
+//  private static final Logger log = LoggerFactory.getLogger(JavaJsonEventBusTest.class);
+//
+//  @Override
+//  protected void setUp() throws Exception {
+//    super.setUp();
+//    startApp(TestClient.class.getName());
+//  }
+//
+//  @Override
+//  protected void tearDown() throws Exception {
+//    super.tearDown();
+//  }
+//
+//  @Test
+//  public void testChangesNotVisibleObject1() throws Exception {
+//    startTest(getMethodName());
+//  }
+//
+//  @Test
+//  public void testChangesNotVisibleObject2() throws Exception {
+//    startTest(getMethodName());
+//  }
+//
+//  @Test
+//  public void testChangesNotVisibleObject3() throws Exception {
+//    startTest(getMethodName());
+//  }
+//
+//  @Test
+//  public void testChangesNotVisibleArray1() throws Exception {
+//    startTest(getMethodName());
+//  }
+//
+//  @Test
+//  public void testChangesNotVisibleArray2() throws Exception {
+//    startTest(getMethodName());
+//  }
+//
+//  @Test
+//  public void testChangesNotVisibleArray3() throws Exception {
+//    startTest(getMethodName());
+//  }
 
 }
 

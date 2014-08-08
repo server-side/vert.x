@@ -32,120 +32,124 @@ import java.util.Map;
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class TestClient extends TestClientBase {
-
-  @Override
-  public void start() {
-    super.start();
-    tu.appReady();
-  }
-
-  // The tests
-
-  public void testChangesNotVisibleObject1() {
-    JsonObject obj = new JsonObject();
-    EventBus eb = vertx.eventBus();
-    eb.registerHandler("foo", new Handler<Message<JsonObject>>() {
-      @Override
-      public void handle(Message<JsonObject> msg) {
-        tu.azzert(!msg.body().containsField("b"));
-        tu.testComplete();
-      }
-    });
-    eb.send("foo", obj);
-    obj.putString("b", "blurrgg");
-  }
-
-  public void testChangesNotVisibleObject2() {
-    final JsonObject obj = new JsonObject();
-    EventBus eb = vertx.eventBus();
-    eb.registerHandler("foo", new Handler<Message<JsonObject>>() {
-      @Override
-      public void handle(Message<JsonObject> msg) {
-        msg.body().putString("b", "uqwduihwqd");
-      }
-    });
-    eb.send("foo", obj);
-    vertx.setTimer(1000, new Handler<Long>() {
-      @Override
-      public void handle(Long id) {
-        tu.azzert(!obj.containsField("b"));
-        tu.testComplete();
-      }
-    });
-  }
-
-  public void testChangesNotVisibleObject3() {
-    Map<String, Object> map = new HashMap<>();
-    final JsonObject obj = new JsonObject(map);
-    EventBus eb = vertx.eventBus();
-    eb.registerHandler("foo", new Handler<Message<JsonObject>>() {
-      @Override
-      public void handle(final Message<JsonObject> msg) {
-        vertx.setTimer(1000, new Handler<Long>() {
-          @Override
-          public void handle(Long id) {
-            tu.azzert(!msg.body().containsField("b"));
-            tu.testComplete();
-          }
-        });
-      }
-    });
-    eb.send("foo", obj);
-    map.put("b", "uhqdihuqwd");
-  }
-
-  public void testChangesNotVisibleArray1() {
-    JsonArray obj = new JsonArray();
-    EventBus eb = vertx.eventBus();
-    eb.registerHandler("foo", new Handler<Message<JsonArray>>() {
-      @Override
-      public void handle(Message<JsonArray> msg) {
-        tu.azzert(msg.body().size() == 0);
-        tu.testComplete();
-      }
-    });
-    eb.send("foo", obj);
-    obj.add("blah");
-  }
-
-  public void testChangesNotVisibleArray2() {
-    final JsonArray obj = new JsonArray();
-    EventBus eb = vertx.eventBus();
-    eb.registerHandler("foo", new Handler<Message<JsonArray>>() {
-      @Override
-      public void handle(Message<JsonArray> msg) {
-        msg.body().add("blah");
-      }
-    });
-    eb.send("foo", obj);
-    vertx.setTimer(1000, new Handler<Long>() {
-      @Override
-      public void handle(Long id) {
-        tu.azzert(obj.size() == 0);
-        tu.testComplete();
-      }
-    });
-  }
-
-  public void testChangesNotVisibleArray3() {
-    List<Object> list = new ArrayList<>();
-    final JsonArray obj = new JsonArray(list);
-    EventBus eb = vertx.eventBus();
-    eb.registerHandler("foo", new Handler<Message<JsonArray>>() {
-      @Override
-      public void handle(final Message<JsonArray> msg) {
-        vertx.setTimer(1000, new Handler<Long>() {
-          @Override
-          public void handle(Long id) {
-            tu.azzert(msg.body().size() == 0);
-            tu.testComplete();
-          }
-        });
-      }
-    });
-    eb.send("foo", obj);
-    list.add("uhwqdiuh");
-  }
-
+//
+//  @Override
+//  public void start() {
+//    super.start();
+//    tu.appReady();
+//  }
+//
+//  // The tests
+//
+//	/**
+//	 * NOTE-YOUKU: Because we don't copy, the changes ARE visible locally by default.
+//  public void testChangesNotVisibleObject1() {
+//    JsonObject obj = new JsonObject();
+//    EventBus eb = vertx.eventBus();
+//    eb.registerHandler("foo", new Handler<Message<JsonObject>>() {
+//      @Override
+//      public void handle(Message<JsonObject> msg) {
+//	      System.out.println(msg.body());
+//	      tu.azzert(!msg.body().containsField("b"));
+//        tu.testComplete();
+//      }
+//    });
+//    eb.send("foo", obj);
+//    obj.putString("b", "blurrgg");
+//  }
+//	 **/
+//
+//  public void testChangesNotVisibleObject2() {
+//    final JsonObject obj = new JsonObject();
+//    EventBus eb = vertx.eventBus();
+//    eb.registerHandler("foo", new Handler<Message<JsonObject>>() {
+//      @Override
+//      public void handle(Message<JsonObject> msg) {
+//        msg.body().putString("b", "uqwduihwqd");
+//      }
+//    });
+//    eb.send("foo", obj);
+//    vertx.setTimer(1000, new Handler<Long>() {
+//      @Override
+//      public void handle(Long id) {
+//        tu.azzert(!obj.containsField("b"));
+//        tu.testComplete();
+//      }
+//    });
+//  }
+//
+//  public void testChangesNotVisibleObject3() {
+//    Map<String, Object> map = new HashMap<>();
+//    final JsonObject obj = new JsonObject(map);
+//    EventBus eb = vertx.eventBus();
+//    eb.registerHandler("foo", new Handler<Message<JsonObject>>() {
+//      @Override
+//      public void handle(final Message<JsonObject> msg) {
+//        vertx.setTimer(1000, new Handler<Long>() {
+//          @Override
+//          public void handle(Long id) {
+//            tu.azzert(!msg.body().containsField("b"));
+//            tu.testComplete();
+//          }
+//        });
+//      }
+//    });
+//    eb.send("foo", obj);
+//    map.put("b", "uhqdihuqwd");
+//  }
+//
+//  public void testChangesNotVisibleArray1() {
+//    JsonArray obj = new JsonArray();
+//    EventBus eb = vertx.eventBus();
+//    eb.registerHandler("foo", new Handler<Message<JsonArray>>() {
+//      @Override
+//      public void handle(Message<JsonArray> msg) {
+//        tu.azzert(msg.body().size() == 0);
+//        tu.testComplete();
+//      }
+//    });
+//    eb.send("foo", obj);
+//    obj.add("blah");
+//  }
+//
+//  public void testChangesNotVisibleArray2() {
+//    final JsonArray obj = new JsonArray();
+//    EventBus eb = vertx.eventBus();
+//    eb.registerHandler("foo", new Handler<Message<JsonArray>>() {
+//      @Override
+//      public void handle(Message<JsonArray> msg) {
+//        msg.body().add("blah");
+//      }
+//    });
+//    eb.send("foo", obj);
+//    vertx.setTimer(1000, new Handler<Long>() {
+//      @Override
+//      public void handle(Long id) {
+//        tu.azzert(obj.size() == 0);
+//        tu.testComplete();
+//      }
+//    });
+//  }
+//
+//  public void testChangesNotVisibleArray3() {
+//    List<Object> list = new ArrayList<>();
+//    final JsonArray obj = new JsonArray(list);
+//    EventBus eb = vertx.eventBus();
+//    eb.registerHandler("foo", new Handler<Message<JsonArray>>() {
+//      @Override
+//      public void handle(final Message<JsonArray> msg) {
+//        vertx.setTimer(1000, new Handler<Long>() {
+//          @Override
+//          public void handle(Long id) {
+//            tu.azzert(msg.body().size() == 0);
+//            tu.testComplete();
+//          }
+//        });
+//      }
+//    });
+//    eb.send("foo", obj);
+//    list.add("uhwqdiuh");
+//  }
+//
 
 }
