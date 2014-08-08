@@ -31,7 +31,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.eriwen:gradle-js-plugin:1.1'
+    classpath 'com.eriwen:gradle-js-plugin:1.12.0'
   }
 } 
 
@@ -49,8 +49,8 @@ allprojects {
 subprojects {
   apply plugin: 'java'
   
-  sourceCompatibility = '1.7'
-  targetCompatibility = '1.7'
+  sourceCompatibility = '1.8'
+  targetCompatibility = '1.8'
 
   defaultTasks = ['classes']
   group = rootProject.group

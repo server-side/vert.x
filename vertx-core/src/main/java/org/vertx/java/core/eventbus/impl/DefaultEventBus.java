@@ -940,7 +940,8 @@ public class DefaultEventBus implements EventBus {
 
   private <T> void doReceive(final BaseMessage<T> msg, final HandlerHolder<T> holder) {
     // Each handler gets a fresh copy
-    final Message<T> copied = msg.copy();
+	  // NOTE: Remove Copy here.
+    // final Message<T> copied = msg.copy();
 
     holder.context.execute(new Runnable() {
       public void run() {
@@ -948,7 +949,7 @@ public class DefaultEventBus implements EventBus {
         // before it was received
         try {
           if (!holder.removed) {
-            holder.handler.handle(copied);
+            holder.handler.handle(msg);
           }
         } finally {
           if (holder.replyHandler) {
