@@ -383,6 +383,7 @@ public class LocalEchoClient extends EventBusAppBase {
   private <T> Handler<Message<T>> echoHandler(final Object msg) {
     Handler<Message<T>> handler = new Handler<Message<T>>() {
       public void handle(Message reply) {
+
         tu.checkThread();
         if (msg == null) {
           tu.azzert(reply.body() == null);
@@ -392,7 +393,9 @@ public class LocalEchoClient extends EventBusAppBase {
           } else {
             TestUtils.byteArraysEqual((byte[])msg, (byte[])reply.body());
           }
-          // Bytes and Booleans are never copied since cached in the JVM
+	        // Bytes and Booleans are never copied since cached in the JVM
+	        // NOTE-YOUKU: All data should not be copied.
+	        /**
           if ((!isLocal() && !(msg instanceof Byte) && !(msg instanceof Boolean)) ||
               (isLocal() && ((msg instanceof Buffer) || (msg instanceof byte[]) || (msg instanceof JsonObject) || (msg instanceof JsonArray)))) {
             // Should be copied
@@ -401,6 +404,7 @@ public class LocalEchoClient extends EventBusAppBase {
             // Shouldn't be copied
             tu.azzert(msg == reply.body());
           }
+	         **/
         }
         eb.unregisterHandler(echoAddress(), this);
         tu.testComplete();

@@ -911,7 +911,7 @@ public class DefaultEventBus implements EventBus {
       } else {
         // Publish
         for (HandlerHolder holder: handlers.list) {
-          doReceive(msg, holder);
+          doReceiveCopy(msg, holder);
         }
       }
     } else {
@@ -938,10 +938,13 @@ public class DefaultEventBus implements EventBus {
   }
 
 
+	private <T> void doReceiveCopy(final BaseMessage<T> msg, final HandlerHolder<T> holder) {
+		// Each handler gets a fresh copy
+		final Message<T> copied = msg.copy();
+		doReceive((BaseMessage<T>)copied, holder);
+	}
+
   private <T> void doReceive(final BaseMessage<T> msg, final HandlerHolder<T> holder) {
-    // Each handler gets a fresh copy
-	  // NOTE: Remove Copy here.
-    // final Message<T> copied = msg.copy();
 
     holder.context.execute(new Runnable() {
       public void run() {

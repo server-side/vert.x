@@ -40,6 +40,7 @@ public abstract class BaseMessage<U> implements Message<U> {
   protected String replyAddress;
   protected boolean send; // Is it a send or a publish?
 
+	protected BaseMessage() {};
   protected BaseMessage(boolean send, String address, U body) {
     this.send = send;
     this.body = body;
@@ -353,5 +354,36 @@ public abstract class BaseMessage<U> implements Message<U> {
     if (bus != null) {
       bus.sendReplyWithTimeout(sender, msg, timeout, replyHandler);
     }
+  }
+
+
+  protected int readNonBodyFields(Buffer readBuff) {
+    int pos = 1;
+    byte bsend = readBuff.getByte(pos);
+    send = bsend == 0;
+    pos += 1;
+    int addressLength = readBuff.getInt(pos);
+    pos += 4;
+    byte[] addressBytes = readBuff.getBytes(pos, pos + addressLength);
+    pos += addressLength;
+    address = new String(addressBytes, CharsetUtil.UTF_8);
+    int port = readBuff.getInt(pos);
+    pos += 4;
+    int hostLength = readBuff.getInt(pos);
+    pos += 4;
+    byte[] hostBytes = readBuff.getBytes(pos, pos + hostLength);
+    pos += hostLength;
+    String host = new String(hostBytes, CharsetUtil.UTF_8);
+    sender = new ServerID(port, host);
+    int replyAddressLength = readBuff.getInt(pos);
+    pos += 4;
+    if (replyAddressLength > 0) {
+      byte[] replyAddressBytes = readBuff.getBytes(pos, pos + replyAddressLength);
+      pos += replyAddressLength;
+      replyAddress = new String(replyAddressBytes, CharsetUtil.UTF_8);
+    } else {
+      replyAddress = null;
+    }
+    return pos;
   }
 }

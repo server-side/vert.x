@@ -37,9 +37,10 @@ public class MessageFactory {
   static final byte TYPE_STRING = 11;
   static final byte TYPE_JSON_OBJECT = 12;
   static final byte TYPE_JSON_ARRAY = 13;
+	public static final byte TYPE_OBJECT = 14;
   static final byte TYPE_REPLY_FAILURE = 100;
 
-  static BaseMessage read(Buffer buff) {
+	static BaseMessage read(Buffer buff) {
     byte type = buff.getByte(0);
     switch (type) {
       case TYPE_PING:
