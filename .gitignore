@@ -19,3 +19,5 @@ ScratchTest.java
 test-results
 test-tmp
 *.class
+vertx-testsuite/src/test/mod-test/*
+vertx-testsuite/some-file.dat
