@@ -539,9 +539,7 @@ public class DefaultEventBus implements EventBus {
 
   static <U> BaseMessage<U> createMessage(boolean send, String address, U message) {
     BaseMessage bm;
-	if (message instanceof ObjectMessage) {
-	  bm = new ObjectMessage(send, address, message);
-	} else if (message instanceof String) {
+	if (message instanceof String) {
       bm = new StringMessage(send, address, (String)message);
     } else if (message instanceof Buffer) {
       bm = new BufferMessage(send, address, (Buffer)message);
@@ -569,7 +567,9 @@ public class DefaultEventBus implements EventBus {
       bm = new ByteMessage(send, address, (Byte)message);
     } else if (message == null) {
       bm = new StringMessage(send, address, null);
-    } else {
+    } else if (message instanceof Object) {
+		bm = new ObjectMessage(send, address, message);
+	} else {
       throw new IllegalArgumentException("Cannot send object of class " + message.getClass() + " on the event bus: " + message);
     }
     return bm;
