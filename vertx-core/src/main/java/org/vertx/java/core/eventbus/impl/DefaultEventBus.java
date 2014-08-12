@@ -539,7 +539,9 @@ public class DefaultEventBus implements EventBus {
 
   static <U> BaseMessage<U> createMessage(boolean send, String address, U message) {
     BaseMessage bm;
-    if (message instanceof String) {
+	if (message instanceof ObjectMessage) {
+	  bm = new ObjectMessage(send, address, message);
+	} else if (message instanceof String) {
       bm = new StringMessage(send, address, (String)message);
     } else if (message instanceof Buffer) {
       bm = new BufferMessage(send, address, (Buffer)message);

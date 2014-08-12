@@ -30,20 +30,8 @@ import java.util.Map;
  */
 public class ObjectMessage<T> extends BaseMessage<T> {
 
-  private String decodedType;
-  private MessageCodec<T> codec;
-  private boolean encoded;
-  private Buffer encodedData;
-
-  public ObjectMessage(boolean send, String address, T object, String decodedType, MessageCodec<T> codec) {
-    super(send, address, object);
-    this.decodedType = decodedType;
-    this.codec = codec;
-  }
-
-  public ObjectMessage(Buffer readBuff, Map<String, MessageCodec<T>> codecMap) {
-    int pos = readNonBodyFields(readBuff);
-    readBody(pos, readBuff, codecMap);
+  public ObjectMessage(boolean send, String address, T object) {
+	  super(send, address, object);
   }
 
   @Override
@@ -62,7 +50,7 @@ public class ObjectMessage<T> extends BaseMessage<T> {
         throw new IllegalStateException("copy() must actually copy the object");
       }
       @SuppressWarnings("unchecked")
-      Message<T> ret = new ObjectMessage(send, address, copy, decodedType, codec);
+      Message<T> ret = new ObjectMessage(send, address, copy);
       return ret;
     } else {
       throw new IllegalArgumentException(body.getClass() + " does not implement Copyable or Shareable.");
@@ -74,61 +62,13 @@ public class ObjectMessage<T> extends BaseMessage<T> {
     throw new UnsupportedOperationException();
   }
 
-  protected void readBody(int pos, Buffer readBuff, Map<String, MessageCodec<T>> codecMap) {
-    // decodedType
-    int decodedTypeLength = readBuff.getInt(pos);
-    pos += 4;
-    if (decodedTypeLength > 0) {
-      byte[] bytes = readBuff.getBytes(pos, pos + decodedTypeLength);
-      pos += decodedTypeLength;
-      decodedType = new String(bytes, CharsetUtil.UTF_8);
-    } else {
-      throw new IllegalArgumentException("Could not parse decoded type from buffer");
-    }
-
-    codec = codecMap.get(decodedType);
-    if (codec == null) {
-      throw new RuntimeException("Unable to retrieve message codec for type " + decodedType);
-    }
-
-    boolean isNull = readBuff.getByte(pos) == (byte) 0;
-    if (!isNull) {
-      pos++;
-      int buffLength = readBuff.getInt(pos);
-      pos += 4;
-      byte[] bytes = readBuff.getBytes(pos, pos + buffLength);
-      encodedData = new Buffer(bytes);
-      encoded = true;
-    }
-    body = codec.decode(encodedData);
-  }
-
   @Override
   protected void writeBody(Buffer buff) {
-    writeString(buff, decodedType);
-
-    encode();
-    if (encodedData == null) {
-      buff.appendByte((byte) 0);
-    } else {
-      buff.appendByte((byte) 1);
-      buff.appendInt(encodedData.length());
-      buff.appendBuffer(encodedData);
-    }
+	throw new UnsupportedOperationException();
   }
 
   @Override
   protected int getBodyLength() {
-    encode();
-    return 1 + (encodedData == null ? 0 : 4 + encodedData.length());
-  }
-
-  private Buffer encode() {
-    if (!encoded) {
-      encodedData = codec.encode(body);
-      encoded = true;
-    }
-
-    return encodedData;
+	throw new UnsupportedOperationException();
   }
 }
