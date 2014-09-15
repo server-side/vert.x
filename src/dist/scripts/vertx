@@ -178,6 +178,6 @@ exec "$JAVACMD" \
     "${JVM_OPTS[@]}" \
     -Dvertx.home=$VERTX_HOME\
     -Dvertx.clusterManagerFactory=org.vertx.java.spi.cluster.impl.hazelcast.HazelcastClusterManagerFactory\
-		-Dorg.vertx.logger-delegate-factory-class-name=org.vertx.java.core.logging.impl.SLF4JLogDelegateFactory \
+	-Dorg.vertx.logger-delegate-factory-class-name=org.vertx.java.core.logging.impl.SLF4JLogDelegateFactory \
     -classpath "$CLASSPATH" \
     org.vertx.java.platform.impl.cli.Starter "$@"
